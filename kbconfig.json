@@ -1,0 +1,21 @@
+{
+  "content_directories": [
+    "Books",
+    "Papers",
+    "Concepts",
+    "Authors",
+    "Cases",
+    "Conversations",
+    "Frameworks",
+    "Research",
+    "Datasets",
+    "References"
+  ],
+  "embedding_backend": "hashing",
+  "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "embedding_dimensions": 384,
+  "chunk_size": 1400,
+  "chunk_overlap": 180,
+  "top_k": 8
+}
+

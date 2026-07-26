@@ -1,0 +1,20 @@
+name: knowledge-base-ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest
+      - run: python -m relationship_kb lint --strict
+      - run: python -m relationship_kb build --backend hashing
+      - run: python -m relationship_kb query "attachment emotional safety conflict repair" --top-k 5 --json
+
