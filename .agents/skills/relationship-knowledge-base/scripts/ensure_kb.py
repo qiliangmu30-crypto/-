@@ -89,7 +89,12 @@ def _update_managed_checkout(root: Path) -> bool:
         print(f"warning: knowledge-base cache is on {branch!r}; update skipped", file=sys.stderr)
         return False
     try:
-        _run_git(["pull", "--ff-only", "--depth", "1", "origin", "main"], cwd=root)
+        is_shallow = _run_git(["rev-parse", "--is-shallow-repository"], cwd=root) == "true"
+        if is_shallow:
+            _run_git(["fetch", "--unshallow", "origin", "main"], cwd=root)
+            _run_git(["merge", "--ff-only", "FETCH_HEAD"], cwd=root)
+        else:
+            _run_git(["pull", "--ff-only", "origin", "main"], cwd=root)
     except RuntimeError as exc:
         print(f"warning: knowledge-base update failed; using cached copy: {exc}", file=sys.stderr)
         return False
