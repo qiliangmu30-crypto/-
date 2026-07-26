@@ -40,6 +40,7 @@ def _filters(doc_type: str | None, author: str | None, concept: str | None) -> t
 
 
 def _row_result(row: Any, score: float, keyword_rank: int | None, vector_rank: int | None) -> SearchResult:
+    metadata = json.loads(row["metadata_json"])
     return SearchResult(
         chunk_id=row["chunk_id"],
         document_path=row["document_path"],
@@ -50,6 +51,9 @@ def _row_result(row: Any, score: float, keyword_rank: int | None, vector_rank: i
         authors=json.loads(row["authors_json"]),
         concepts=json.loads(row["concepts_json"]),
         source_url=row["source_url"],
+        doi=str(metadata.get("doi", "")),
+        evidence_level=str(metadata.get("evidence_level", "")),
+        review_status=str(metadata.get("review_status", "")),
         score=score,
         keyword_rank=keyword_rank,
         vector_rank=vector_rank,
@@ -68,7 +72,8 @@ def hybrid_search(
     connection = connect(root)
     filter_sql, filter_values = _filters(doc_type, author, concept)
     base_select = """SELECT c.chunk_id, c.document_path, c.title, c.doc_type, c.section,
-        c.content, c.authors_json, c.concepts_json, c.source_url, c.embedding FROM chunks c"""
+        c.content, c.authors_json, c.concepts_json, c.source_url, c.embedding, d.metadata_json
+        FROM chunks c JOIN documents d ON d.path = c.document_path"""
 
     keyword_rows: list[Any] = []
     tokens = _query_tokens(query)
@@ -142,6 +147,7 @@ def format_context(query: str, results: list[SearchResult]) -> str:
                 f"Path: {result.document_path}; type: {result.doc_type}{source}",
                 f"Authors: {', '.join(result.authors) or 'not recorded'}",
                 f"Concepts: {', '.join(result.concepts) or 'not recorded'}",
+                f"Evidence: {result.evidence_level or 'not recorded'}; review: {result.review_status or 'not recorded'}; DOI: {result.doi or 'not recorded'}",
                 "",
                 "<source_text>",
                 result.content,

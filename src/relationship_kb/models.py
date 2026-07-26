@@ -39,6 +39,9 @@ class SearchResult:
     authors: list[str]
     concepts: list[str]
     source_url: str
+    doi: str
+    evidence_level: str
+    review_status: str
     score: float
     keyword_rank: int | None = None
     vector_rank: int | None = None
@@ -54,8 +57,10 @@ class SearchResult:
             "authors": self.authors,
             "concepts": self.concepts,
             "source_url": self.source_url,
+            "doi": self.doi,
+            "evidence_level": self.evidence_level,
+            "review_status": self.review_status,
             "score": round(self.score, 6),
             "keyword_rank": self.keyword_rank,
             "vector_rank": self.vector_rank,
         }
-

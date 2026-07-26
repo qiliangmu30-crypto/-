@@ -37,6 +37,24 @@ Relationship-KnowledgeBase/
 └── index/             # 生成的 SQLite/向量/图索引（默认不入 Git）
 ```
 
+## 作为 Codex Skill 跨电脑使用
+
+仓库内置 `relationship-knowledge-base` Skill。目标电脑需要安装 Git、Python 3.10 或更高版本，并拥有本私有 GitHub 仓库的读取权限。
+
+在目标电脑的 Codex 中输入：
+
+```text
+$skill-installer 请从私有 GitHub 仓库 qiliangmu30-crypto/- 的 main 分支安装 `.agents/skills/relationship-knowledge-base`，使用 auto 方法。
+```
+
+安装完成后重启 Codex，然后可在任意项目中调用：
+
+```text
+$relationship-knowledge-base 分析：我们每次谈钱，一方追问，一方沉默，我该如何理解和行动？
+```
+
+首次调用会通过本机 Git 凭据把完整知识库下载到 Codex 缓存，后续调用会复用并尝试快进更新；它不会在当前项目中创建知识库文件，缓存也可删除后重新获取。若私有仓库认证失败，请先在目标电脑登录 GitHub 并为 Git 配置凭据；不要把访问令牌粘贴到聊天中。也可将 `RELATIONSHIP_KB_HOME` 指向已有的完整仓库副本。
+
 ## 5 分钟开始
 
 Windows PowerShell：
@@ -160,4 +178,3 @@ git status --short
 ## 项目边界
 
 本版提供的是可靠的“可扩展种子库 + 可运行 RAG”，不是宣称已经数字化了全部关系科学。来源发现与筛选记录见 [[References/GITHUB_DISCOVERY|GitHub 来源调研]] 和 [[References/SOURCE_CATALOG|开放来源目录]]；尚待补充的问题见 [[Research/Research-Agenda|研究议程]]。
-

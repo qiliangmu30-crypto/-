@@ -1,0 +1,4 @@
+interface:
+  display_name: "Relationship Knowledge Base"
+  short_description: "Evidence-aware relationship psychology analysis"
+  default_prompt: "Use $relationship-knowledge-base to analyze this relationship question with evidence, safety checks, and practical options."
